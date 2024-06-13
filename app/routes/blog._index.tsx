@@ -22,8 +22,11 @@ export default function blogIndex() {
                 </svg>
               </h1>
 
+              <Link to="/blog/new" className="ml-3 bg-black text-white hover:bg-gray-600 p-2 rounded">➕ New Post</Link>  
+
+
              {posts.map((post:any) => (
-              <div className="mt-3">
+              <div className="mt-3 p-3 border-b-2 " key={post.id}>
                 <Link to={'/blog/'+post.id}>
                 <div className="w-full  hover:bg-gray-200">
                   <h2 className="text-black text-2xl mx-1 font-extrabold  relative inline-block stroke-current">✅ {post.title}</h2>

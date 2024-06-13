@@ -1,4 +1,4 @@
-import { Outlet, Link } from "@remix-run/react";
+import { Outlet, Link,Form } from "@remix-run/react";
 import type { MetaFunction } from "@remix-run/node";
 
 export const meta: MetaFunction = () => {
@@ -39,7 +39,9 @@ export default function blog() {
 
 
                 <div className="mt-5 flex flex-row">
+                
                 <div className="basis-3/4 ">
+                 
                     <Outlet/>
                 </div>
                 <div className="basis-1/4 ">
@@ -150,7 +152,7 @@ export default function blog() {
                   <path d="M0.652466 4.00002C15.8925 2.66668 48.0351 0.400018 54.6853 2.00002" strokeWidth="2"></path>
                 </svg>
               </h1>
-               <form action="https://formspree.io/f/xoqyqgqk" method="POST">
+               <Form action="/?index" method="POST">
               <div className="mt-2">
                 <label htmlFor="name">Name</label>
                 <input type="text" name="name" id="name" className="w-full p-2 border-2 border-black shadow" />
@@ -166,7 +168,7 @@ export default function blog() {
                 <div className="mt-2">
                 <button type="submit" className="w-full bg-black text-white p-2 hover:bg-gray-800">Send</button>
                 </div>
-                </form>
+                </Form>
               </div>
           </div>
                 </div>

@@ -1,5 +1,5 @@
-import type { LoaderFunction, MetaFunction } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import type { ActionFunction, ActionFunctionArgs, LoaderFunction, MetaFunction } from "@remix-run/node";
+import { Form, Link, redirect, useLoaderData, useNavigation } from "@remix-run/react";
 import { db } from "utils/db.server";
 import { randomTextColor } from "utils/common";
 export const meta: MetaFunction = () => {
@@ -20,9 +20,25 @@ export const loader: LoaderFunction = async () => {
 
   return data;
 }
+export const action: ActionFunction = async ({ request }:ActionFunctionArgs) => {
+    const form = await request.formData();
+    const name= form.get('name');
+    const email = form.get('email');
+    const message = form.get('message');
+    await db.inbox.create({
+        data:{
+            name: name as string,
+            email: email as string,
+            message: message as string
+        }
+    });
+
+    return redirect('/');
+};
 
 export default function Index() {
   const { posts } = useLoaderData<typeof loader>();
+  const navigation = useNavigation();
   return (
     <div className="h-screen ">
       <div className="container w-1/8 mx-auto mt-5  ">
@@ -216,7 +232,8 @@ export default function Index() {
                   <path d="M0.652466 4.00002C15.8925 2.66668 48.0351 0.400018 54.6853 2.00002" strokeWidth="2"></path>
                 </svg>
               </h1>
-               <form action="https://formspree.io/f/xoqyqgqk" method="POST">
+              {navigation.state === "submitting" && <p className="text-red-500">Sending...</p>}
+               <Form action="/?index" method="POST" preventScrollReset>
               <div className="mt-2">
                 <label htmlFor="name">Name</label>
                 <input type="text" name="name" id="name" className="w-full p-2 border-2 border-black shadow" />
@@ -230,9 +247,11 @@ export default function Index() {
                 <textarea name="message" id="message" className="w-full p-2 border-2 border-black shadow"></textarea>
                 </div>
                 <div className="mt-2">
-                <button type="submit" className="w-full bg-black text-white p-2 hover:bg-gray-800">Send</button>
+                <button type="submit" className="w-full bg-black text-white p-2 hover:bg-gray-800">
+                  {navigation.state==="submitting"?"Sending...":"Send"}
+                </button>
                 </div>
-                </form>
+                </Form>
               </div>
           </div>
         </div>
