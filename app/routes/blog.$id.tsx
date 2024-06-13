@@ -1,6 +1,7 @@
 import { MetaFunction, useParams,useLoaderData, Link,useLocation } from "@remix-run/react";
-import { LoaderFunction, LoaderFunctionArgs } from "@remix-run/node";
+import { LoaderFunction, LoaderFunctionArgs, MetaArgs } from "@remix-run/node";
 import { db } from "utils/db.server";
+
 
 export const loader: LoaderFunction = async ({params}: LoaderFunctionArgs) => {
     
@@ -13,12 +14,12 @@ export const loader: LoaderFunction = async ({params}: LoaderFunctionArgs) => {
     return data; 
 };
 
+export const meta: MetaFunction = ({data}: MetaArgs ) => {
 
-
-export const meta: MetaFunction = () => {
-
+    
+    let {title} = data.post;
     return [
-      { title: `TITLE POST - JUSTALINKO`},
+      { title: `${title} - JUSTALINKO`},
       { name: "description", content: "Justalinko personal page" },
     ];
   };
@@ -26,6 +27,8 @@ export const meta: MetaFunction = () => {
 export default function blogDetail() {
 
     const {post} = useLoaderData<typeof loader>();
+   
+  
     return (
 
         <Content title={post.title}>
@@ -39,9 +42,9 @@ export default function blogDetail() {
             </span>
             </div>
 
-            <p className="mt-4">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#️⃣ {post.content}
-            </p>
+            <div className="mt-4" dangerouslySetInnerHTML={{__html: post.content}}>
+                
+            </div>
             <div className="mt-5">
                 
                 <div className="flex justify-center gap-1">
